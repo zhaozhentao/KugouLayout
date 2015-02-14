@@ -4,14 +4,14 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class NoClickThroughFrameLayout extends BuildLayerFrameLayout{
-	public NoClickThroughFrameLayout(Context context){
+public class UnClickableFrameLayout extends BuildLayerFrameLayout{
+	public UnClickableFrameLayout(Context context){
 		super(context);
 	}
-	public NoClickThroughFrameLayout(Context context, AttributeSet attrs){
+	public UnClickableFrameLayout(Context context, AttributeSet attrs){
 		super(context, attrs);
 	}
-	public NoClickThroughFrameLayout(Context context, AttributeSet attrs, int defStyle){
+	public UnClickableFrameLayout(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
 	}
 	@Override

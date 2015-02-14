@@ -9,21 +9,21 @@ public class BuildLayerFrameLayout extends FrameLayout{
 
     public BuildLayerFrameLayout(Context context) {
         super(context);
-        if (CircleSwipeLayout.USE_TRANSLATIONS) {
+        if (CircleSwipeLayout2.USE_TRANSLATIONS) {
             setLayerType(LAYER_TYPE_HARDWARE, null);
         }
     }
 
     public BuildLayerFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if (CircleSwipeLayout.USE_TRANSLATIONS) {
+        if (CircleSwipeLayout2.USE_TRANSLATIONS) {
             setLayerType(LAYER_TYPE_HARDWARE, null);
         }
     }
 
     public BuildLayerFrameLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        if (CircleSwipeLayout.USE_TRANSLATIONS) {
+        if (CircleSwipeLayout2.USE_TRANSLATIONS) {
             setLayerType(LAYER_TYPE_HARDWARE, null);
         }
     }
