@@ -88,6 +88,7 @@ public class KugouLayout extends ViewGroup {
     public KugouLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
+        mKugouLayout = this;
     }
 
     private void init(Context context){
@@ -118,6 +119,7 @@ public class KugouLayout extends ViewGroup {
             public void onAnimationEnd(Animator animation) {
                 float endValue = (Float)mOffsetAnimator.getAnimatedValue();
                 if((endValue == getWidth() || endValue == -getWidth()) && null != mLayoutCloseListener) {
+                    setVisibility(INVISIBLE);
                     mLayoutCloseListener.onLayoutClose();
                 }
             }
@@ -183,11 +185,18 @@ public class KugouLayout extends ViewGroup {
     }
 
     public static KugouLayout attach(Activity activity){
-        mKugouLayout = createCircleSwipeLayout(activity);
+        createCircleSwipeLayout(activity);
         mKugouLayout.setId(R.id.md__drawer);
         attachToContent(activity, mKugouLayout);
         mKugouLayout.mContentContainer.setBackgroundColor(0x0);
         return mKugouLayout;
+    }
+
+    public void setContentView(View view){
+        if(mKugouLayout.mContentContainer.getChildCount()!=0){
+            throw new RuntimeException("kugou layout can only have one direct child view ");
+        }
+        mKugouLayout.mContentContainer.addView(view, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
     @Override
@@ -389,7 +398,7 @@ public class KugouLayout extends ViewGroup {
 
     Rect rect = new Rect();
     Iterator<View> scrollChildListIterator;
-    private boolean canChildScroll(float x, float y){
+    private boolean canChildScroll(float rawX, float rawY){
         int[] location = new int[2];
         View childView;
 
@@ -398,7 +407,7 @@ public class KugouLayout extends ViewGroup {
             childView = scrollChildListIterator.next();
             childView.getLocationInWindow(location);
             rect.set(childView.getLeft(), location[1], childView.getRight(), location[1]+childView.getHeight());
-            if(rect.contains((int)x, (int)y)){
+            if(rect.contains((int)rawX, (int)rawY)){
                 return true;
             }
         }
@@ -438,7 +447,7 @@ public class KugouLayout extends ViewGroup {
                 final float dx= x - mLastMotionX;
                 final float dy= y - mLastMotionY;
                 if(checkTouchSlop(dx, dy)){
-                    if( mOffsetPixels == 0 && canChildScroll(x, y)){
+                    if( mOffsetPixels == 0 && canChildScroll(ev.getRawX(), ev.getRawY())){
                         onActionUp((int)ev.getX(), (int)ev.getY());
                         return false;
                     }
