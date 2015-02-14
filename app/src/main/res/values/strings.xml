@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KugouLayout</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_normal_anim">普通</string>
+    <string name="action_rebound_anim">回弹</string>
+    <string name="action_always_rebound_anim">回弹 不关闭</string>
+</resources>

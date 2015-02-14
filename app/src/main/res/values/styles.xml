@@ -1,0 +1,9 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme1" parent="android:Theme.Holo.Light.DarkActionBar"/>
+    <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+</resources>
