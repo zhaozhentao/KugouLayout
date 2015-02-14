@@ -26,6 +26,7 @@ import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by zzt on 2015/2/11.
@@ -76,15 +77,15 @@ public class KugouLayout extends ViewGroup {
     private int ANIM_DURATION = 300;
     public static final boolean USE_TRANSLATIONS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 
-    private KugouLayout(Context context) {
+    public KugouLayout(Context context) {
         this(context, null);
     }
 
-    private KugouLayout(Context context, AttributeSet attrs) {
+    public KugouLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    private KugouLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public KugouLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -387,13 +388,21 @@ public class KugouLayout extends ViewGroup {
     }
 
     Rect rect = new Rect();
+    Iterator<View> scrollChildListIterator;
     private boolean canChildScroll(float x, float y){
         int[] location = new int[2];
-        View view = scrollChildList.get(0);
-        view.getLocationInWindow(location);
-        rect.set(view.getLeft(), location[1], view.getRight(), location[1]+view.getHeight());
-        boolean contains = rect.contains((int)x, (int)y);
-        return contains;
+        View childView;
+
+        scrollChildListIterator = scrollChildList.iterator();
+        while(scrollChildListIterator.hasNext()){
+            childView = scrollChildListIterator.next();
+            childView.getLocationInWindow(location);
+            rect.set(childView.getLeft(), location[1], childView.getRight(), location[1]+childView.getHeight());
+            if(rect.contains((int)x, (int)y)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
