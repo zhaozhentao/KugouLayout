@@ -5,22 +5,21 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.zzt.library.CircleSwipeLayout;
-import com.zzt.library.CircleSwipeLayout2;
+import com.zzt.library.KugouLayout;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    CircleSwipeLayout2 circleSwipeLayout;
+    KugouLayout circleSwipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        circleSwipeLayout = CircleSwipeLayout2.attach(this);
+        circleSwipeLayout = KugouLayout.attach(this);
         circleSwipeLayout.addHorizontalScrollableView(findViewById(R.id.horizontalScrollView));
-        circleSwipeLayout.setLayoutCloseListener(new CircleSwipeLayout2.LayoutCloseListener() {
+        circleSwipeLayout.setLayoutCloseListener(new KugouLayout.LayoutCloseListener() {
             @Override
             public void onLayoutClose() {
                 finish();
@@ -40,13 +39,13 @@ public class MainActivity extends ActionBarActivity {
 
         switch (id){
             case R.id.action_normal_anim:
-                circleSwipeLayout.setAnimType(CircleSwipeLayout2.NORMAL_ANIM);
+                circleSwipeLayout.setAnimType(KugouLayout.NORMAL_ANIM);
                 return true;
             case R.id.action_rebound_anim:
-                circleSwipeLayout.setAnimType(CircleSwipeLayout2.REBOUND_ANIM);
+                circleSwipeLayout.setAnimType(KugouLayout.REBOUND_ANIM);
                 return true;
             case R.id.action_always_rebound_anim:
-                circleSwipeLayout.setAnimType(CircleSwipeLayout2.ALWAYS_REBOUND);
+                circleSwipeLayout.setAnimType(KugouLayout.ALWAYS_REBOUND);
                 return true;
         }
         return super.onOptionsItemSelected(item);

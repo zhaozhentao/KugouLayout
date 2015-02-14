@@ -5,11 +5,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Property;
@@ -32,13 +30,13 @@ import java.util.ArrayList;
 /**
  * Created by zzt on 2015/2/11.
  */
-public class CircleSwipeLayout2 extends ViewGroup {
+public class KugouLayout extends ViewGroup {
 
     private static final String TAG = "CircleSwipeLayout2";
 
     private LayoutCloseListener mLayoutCloseListener;
-    private static CircleSwipeLayout2 mCircleSwipeLayout2;
-    private NoClickThroughFrameLayout mContentContainer;
+    private static KugouLayout mKugouLayout;
+    private UnClickableFrameLayout mContentContainer;
     private AnimatorSet mAnimatorSet;
     private ObjectAnimator mOffsetAnimator;
     private Interpolator mInterpolator = new DecelerateInterpolator();
@@ -78,15 +76,15 @@ public class CircleSwipeLayout2 extends ViewGroup {
     private int ANIM_DURATION = 300;
     public static final boolean USE_TRANSLATIONS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 
-    private CircleSwipeLayout2(Context context) {
+    private KugouLayout(Context context) {
         this(context, null);
     }
 
-    private CircleSwipeLayout2(Context context, AttributeSet attrs) {
+    private KugouLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    private CircleSwipeLayout2(Context context, AttributeSet attrs, int defStyleAttr) {
+    private KugouLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -99,7 +97,7 @@ public class CircleSwipeLayout2 extends ViewGroup {
         mTouchSlop = configuration.getScaledTouchSlop();
         mMaxVelocity = configuration.getScaledMaximumFlingVelocity();
 
-        mContentContainer = new NoClickThroughFrameLayout(context);
+        mContentContainer = new UnClickableFrameLayout(context);
         mContentContainer.setId(R.id.md__content);
         /**
          * init Property Animation
@@ -169,27 +167,27 @@ public class CircleSwipeLayout2 extends ViewGroup {
         setBackgroundColor(0x0);
     }
 
-    private static CircleSwipeLayout2 createCircleSwipeLayout(Activity activity){
-        return new CircleSwipeLayout2(activity);
+    private static KugouLayout createCircleSwipeLayout(Activity activity){
+        return new KugouLayout(activity);
     }
 
-    private static void attachToContent(Activity activity, CircleSwipeLayout2 circleSwipeLayout2){
+    private static void attachToContent(Activity activity, KugouLayout kugouLayout){
         Window window = activity.getWindow();
         ViewGroup decorView = (ViewGroup)window.getDecorView();
         ViewGroup decorChild= (ViewGroup)decorView.getChildAt(0);
 
         decorView.removeAllViews();
-        mCircleSwipeLayout2.mContentContainer.addView(decorChild, decorChild.getLayoutParams());
-        decorView.addView(mCircleSwipeLayout2, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        mKugouLayout.mContentContainer.addView(decorChild, decorChild.getLayoutParams());
+        decorView.addView(mKugouLayout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         window.setBackgroundDrawable(new ColorDrawable(0x0));
     }
 
-    public static CircleSwipeLayout2 attach(Activity activity){
-        mCircleSwipeLayout2 = createCircleSwipeLayout(activity);
-        mCircleSwipeLayout2.setId(R.id.md__drawer);
-        attachToContent(activity, mCircleSwipeLayout2);
-        mCircleSwipeLayout2.mContentContainer.setBackgroundColor(0x0);
-        return mCircleSwipeLayout2;
+    public static KugouLayout attach(Activity activity){
+        mKugouLayout = createCircleSwipeLayout(activity);
+        mKugouLayout.setId(R.id.md__drawer);
+        attachToContent(activity, mKugouLayout);
+        mKugouLayout.mContentContainer.setBackgroundColor(0x0);
+        return mKugouLayout;
     }
 
     @Override
@@ -523,13 +521,13 @@ public class CircleSwipeLayout2 extends ViewGroup {
         return true;
     }
 
-    Property<CircleSwipeLayout2, Float> aOffset = new Property<CircleSwipeLayout2, Float>(Float.class, "mOffsetPixels"){
+    Property<KugouLayout, Float> aOffset = new Property<KugouLayout, Float>(Float.class, "mOffsetPixels"){
         @Override
-        public Float get(CircleSwipeLayout2 object) {
+        public Float get(KugouLayout object) {
             return object.mOffsetPixels;
         }
         @Override
-        public void set(CircleSwipeLayout2 object, Float value) {
+        public void set(KugouLayout object, Float value) {
             float tempValue = value;
             object.mOffsetPixels = tempValue;
             moveContent();
