@@ -90,6 +90,7 @@ public class KugouLayout extends ViewGroup {
     }
 
     private void init(Context context){
+        setBackgroundColor(0x0);
         /**
          * Distance in pixels a touch can wander before we think the user is scrolling
          * */
@@ -115,9 +116,8 @@ public class KugouLayout extends ViewGroup {
             @Override
             public void onAnimationEnd(Animator animation) {
                 float endValue = (Float)mOffsetAnimator.getAnimatedValue();
-                if(endValue == getWidth() || endValue == -getWidth()) {
-                    if(null != mLayoutCloseListener)
-                        mLayoutCloseListener.onLayoutClose();
+                if((endValue == getWidth() || endValue == -getWidth()) && null != mLayoutCloseListener) {
+                    mLayoutCloseListener.onLayoutClose();
                 }
             }
             @Override
@@ -164,7 +164,6 @@ public class KugouLayout extends ViewGroup {
          * */
         super.addView(mContentContainer, 0, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         mContentContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        setBackgroundColor(0x0);
     }
 
     private static KugouLayout createCircleSwipeLayout(Activity activity){
