@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.zzt.KugouLayout.KugouLayout;
 
 
-public class MainActivity extends ActionBarActivity {
+public class Activity1 extends ActionBarActivity {
 
     KugouLayout kugouLayout;
 
