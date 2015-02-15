@@ -41,3 +41,7 @@ Demo Activity2
     //设置要显示的内容即可
     kugouLayout.setContentView(R.layout.activity_main);
 
+# Me
+
+QQ:344696734
+weibo: http://weibo.com/u/1845905190
