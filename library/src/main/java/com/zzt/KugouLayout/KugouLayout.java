@@ -285,6 +285,7 @@ public class KugouLayout extends ViewGroup {
 
     private void normalCloseAnimStart(int closeDirection){
         closingChangeAlpha = true;
+        showingChangeAlpha = false;
         if(closeDirection == RIGHT)
             mOffsetAnimator.setFloatValues(mOffsetPixels, getWidth());
         else
@@ -377,40 +378,42 @@ public class KugouLayout extends ViewGroup {
     }
 
     protected void onActionUp(int x, int y){
-        if(mIsDragging) {
-            mVelocityTracker.computeCurrentVelocity(1000, mMaxVelocity);
-            final int initialVelocity = (int) getXVelocity(mVelocityTracker);
-            closingChangeAlpha = false;
-
-            if(initialVelocity == 0 || ALWAYS_REBOUND == mAnimType){
-                scrollBackAnim();
-                return ;
-            }
-
-            if(Math.abs(initialVelocity)<30 && Math.abs(mOffsetPixels)<mCloseDistance){
-                if(mOffsetPixels>0)
-                    closeAnim(RIGHT);
-                else
-                    closeAnim(LEFT);
-                return ;
-            }
-
-            if(initialVelocity>0){
-                if(mOffsetPixels >0) {
-                    closeAnim(RIGHT);
-                }else if(mOffsetPixels <0) {
-                    scrollBackAnim();
-                }
-            }else if(initialVelocity<0){
-                if(mOffsetPixels >0) {
-                    scrollBackAnim();
-                }else if(mOffsetPixels <0) {
-                    closeAnim(LEFT);
-                }
-            }
-        }else{
+        if(!mIsDragging) {
             scrollBackAnim();
+            return ;
         }
+
+        mVelocityTracker.computeCurrentVelocity(1000, mMaxVelocity);
+        final int initialVelocity = (int) getXVelocity(mVelocityTracker);
+        closingChangeAlpha = false;
+
+        if(initialVelocity == 0 || ALWAYS_REBOUND == mAnimType){
+            scrollBackAnim();
+            return ;
+        }
+
+        if(Math.abs(initialVelocity)<100 && Math.abs(mOffsetPixels)<mCloseDistance){
+            if(mOffsetPixels>0)
+                closeAnim(RIGHT);
+            else
+                closeAnim(LEFT);
+            return ;
+        }
+
+        if(initialVelocity>0){
+            if(mOffsetPixels >0) {
+                closeAnim(RIGHT);
+            }else if(mOffsetPixels <0) {
+                scrollBackAnim();
+            }
+        }else if(initialVelocity<0){
+            if(mOffsetPixels >0) {
+                scrollBackAnim();
+            }else if(mOffsetPixels <0) {
+                closeAnim(LEFT);
+            }
+        }
+
     }
 
     protected void stopAnim(){
