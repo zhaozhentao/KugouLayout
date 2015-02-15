@@ -27,5 +27,17 @@ Demo Activity2
 
 ![image](https://github.com/zhaozhentao/KugouLayout/blob/master/screenshot/screen1.gif)
 
+# Usage
+###Activity滑动返回
 
+    kugouLayout = new KugouLayout(this);
+    //依附到activity 控制屏幕滑动
+    kugouLayout.attach(this);
+    //需要保护kugoulayout内横向滑动事件的view添加到这里
+    kugouLayout.addHorizontalScrollableView(findViewById(R.id.horizontalScrollView));
+    
+###普通layout的滑动隐藏于显示
+
+    //设置要显示的内容即可
+    kugouLayout.setContentView(R.layout.activity_main);
 
