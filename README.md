@@ -7,7 +7,7 @@ an interesting layout
 
 支持activity滑动返回和普通layout的滑动 显示/隐藏 两种模式,可以参考demo里面的Activity1和Acitivyt2
 
-**有喜欢KugouLayout的 Star一下哦**
+**有喜欢KugouLayout的朋友 Star一下哦**
 
 # 个人建议使用场景
 
