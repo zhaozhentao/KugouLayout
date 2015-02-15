@@ -32,6 +32,11 @@ Demo Activity2
 # Usage
 ###Activity滑动返回
 
+    <!--设置主题属性-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
     kugouLayout = new KugouLayout(this);
     //依附到activity 控制屏幕滑动
     kugouLayout.attach(this);
