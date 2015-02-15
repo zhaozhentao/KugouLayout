@@ -548,8 +548,7 @@ public class KugouLayout extends ViewGroup {
                     final float dx= x - mLastMotionX;
                     final float dy= y - mLastMotionY;
                     if(checkTouchSlop(dx, dy)){
-                        final boolean allowDrag = onMoveAllowDrag((int)x, (int)y, dx, dy);
-                        if(allowDrag){
+                        if(onMoveAllowDrag((int)x, (int)y, dx, dy)){
                             setLayoutState(STATE_DRAGGING);
                             mIsDragging = true;
                             mLastMotionX = x;
