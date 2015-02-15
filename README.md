@@ -19,7 +19,13 @@ and...
 # ScreenShot
 图片较大 加载会慢一些 耐心等待
 
-![image](https://github.com/zhaozhentao/KugouLayout/blob/master/screenshot/screnn.gif)
+Demo Activity1
+
+![image](https://github.com/zhaozhentao/KugouLayout/blob/master/screenshot/screen2.gif)
+
+Demo Activity2
+
+![image](https://github.com/zhaozhentao/KugouLayout/blob/master/screenshot/screen1.gif)
 
 
 
