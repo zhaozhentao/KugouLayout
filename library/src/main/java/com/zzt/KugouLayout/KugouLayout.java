@@ -34,7 +34,7 @@ import java.util.Iterator;
  */
 public class KugouLayout extends ViewGroup {
 
-    private static final String TAG = "CircleSwipeLayout2";
+    private static final String TAG = "KugouLayout";
 
     private LayoutCloseListener mLayoutCloseListener;
     private KugouLayout mKugouLayout;
