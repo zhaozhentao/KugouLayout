@@ -5,7 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.zzt.library.KugouLayout;
+import com.zzt.KugouLayout.KugouLayout;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -17,7 +17,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        kugouLayout = KugouLayout.attach(this);
+        kugouLayout = new KugouLayout(this);
+        kugouLayout.attach(this);
         kugouLayout.addHorizontalScrollableView(findViewById(R.id.horizontalScrollView));
         kugouLayout.setLayoutCloseListener(new KugouLayout.LayoutCloseListener() {
             @Override

@@ -1,4 +1,4 @@
-package com.zzt.library;
+package com.zzt.KugouLayout;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -24,6 +24,7 @@ import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
+import com.zzt.library.R;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +37,7 @@ public class KugouLayout extends ViewGroup {
     private static final String TAG = "CircleSwipeLayout2";
 
     private LayoutCloseListener mLayoutCloseListener;
-    private static KugouLayout mKugouLayout;
+    private KugouLayout mKugouLayout;
     private UnClickableFrameLayout mContentContainer;
     private AnimatorSet mAnimatorSet;
     private ObjectAnimator mOffsetAnimator;
@@ -45,6 +46,7 @@ public class KugouLayout extends ViewGroup {
     private Spring mSpring;
     private ArrayList<View> scrollChildList = new ArrayList<>();
     private VelocityTracker mVelocityTracker;
+    private Activity mParentActivity;
     private int mDragRange;
     private int mCloseDistance;
     private int mWidth;
@@ -56,7 +58,8 @@ public class KugouLayout extends ViewGroup {
     private boolean mBackgroundVisible;
     private boolean mIsDragging = false;
     private boolean doAnim = false;
-    private boolean canChangeAlpha = false;
+    private boolean closingChangeAlpha = false;
+    private boolean showingChangeAlpha = false;
     protected static final int INVALID_POINTER = -1;
     protected static final int STATE_CLOSED = 0;
     protected static final int STATE_CLOSING = 1;
@@ -89,6 +92,8 @@ public class KugouLayout extends ViewGroup {
         super(context, attrs, defStyleAttr);
         init(context);
         mKugouLayout = this;
+        if(context instanceof Activity)
+            mParentActivity = (Activity)context;
     }
 
     private void init(Context context){
@@ -118,10 +123,15 @@ public class KugouLayout extends ViewGroup {
             @Override
             public void onAnimationEnd(Animator animation) {
                 float endValue = (Float)mOffsetAnimator.getAnimatedValue();
-                if((endValue == getWidth() || endValue == -getWidth()) && null != mLayoutCloseListener) {
+                if((endValue == getWidth() || endValue == -getWidth())){
                     setVisibility(INVISIBLE);
-                    mLayoutCloseListener.onLayoutClose();
+                    if(null != mLayoutCloseListener) {
+                        mLayoutCloseListener.onLayoutClose();
+                    }
+                }else if(endValue == 0 && showingChangeAlpha) {
+                    showingChangeAlpha = false;
                 }
+
             }
             @Override
             public void onAnimationCancel(Animator animation) {
@@ -132,7 +142,6 @@ public class KugouLayout extends ViewGroup {
 
             }
         });
-
         /**
          * create rebound animator
          * */
@@ -148,6 +157,9 @@ public class KugouLayout extends ViewGroup {
                     double newValue = 1 - spring.getCurrentValue();
                     mOffsetPixels = (float) newValue * mBeginOffsetX;
                     moveContent();
+                    if(showingChangeAlpha){
+                        changeAlpha();
+                    }
                 }
             }
             @Override
@@ -169,11 +181,7 @@ public class KugouLayout extends ViewGroup {
         mContentContainer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
     }
 
-    private static KugouLayout createCircleSwipeLayout(Activity activity){
-        return new KugouLayout(activity);
-    }
-
-    private static void attachToContent(Activity activity, KugouLayout kugouLayout){
+    private void attachToContent(Activity activity, KugouLayout kugouLayout){
         Window window = activity.getWindow();
         ViewGroup decorView = (ViewGroup)window.getDecorView();
         ViewGroup decorChild= (ViewGroup)decorView.getChildAt(0);
@@ -184,8 +192,7 @@ public class KugouLayout extends ViewGroup {
         window.setBackgroundDrawable(new ColorDrawable(0x0));
     }
 
-    public static KugouLayout attach(Activity activity){
-        createCircleSwipeLayout(activity);
+    public KugouLayout attach(Activity activity){
         mKugouLayout.setId(R.id.md__drawer);
         attachToContent(activity, mKugouLayout);
         mKugouLayout.mContentContainer.setBackgroundColor(0x0);
@@ -197,6 +204,10 @@ public class KugouLayout extends ViewGroup {
             throw new RuntimeException("kugou layout can only have one direct child view ");
         }
         mKugouLayout.mContentContainer.addView(view, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+    }
+
+    public void setContentView(int ResId){
+        setContentView(mParentActivity.getLayoutInflater().inflate(ResId, null));
     }
 
     @Override
@@ -273,7 +284,7 @@ public class KugouLayout extends ViewGroup {
     }
 
     private void normalCloseAnimStart(int closeDirection){
-        canChangeAlpha = true;
+        closingChangeAlpha = true;
         if(closeDirection == RIGHT)
             mOffsetAnimator.setFloatValues(mOffsetPixels, getWidth());
         else
@@ -292,9 +303,10 @@ public class KugouLayout extends ViewGroup {
     }
 
     private void reboundAnimStart(){
-        final float beginFloat = mOffsetPixels;
+        showingChangeAlpha = false;
+        mBeginOffsetX = mOffsetPixels;
         stopAnim();
-        mOffsetPixels = mBeginOffsetX = beginFloat;
+        mOffsetPixels = mBeginOffsetX;
         mSpring.setCurrentValue(0);
         mSpring.setEndValue(1);
         doAnim = true;
@@ -322,6 +334,37 @@ public class KugouLayout extends ViewGroup {
         }
     }
 
+    public void hide(){
+        setVisibility(INVISIBLE);
+    }
+
+    private void changeAlpha(){
+        setAlpha(1 - Math.abs(mOffsetPixels)/getWidth());
+    }
+
+    private void normalShowAnim(){
+        mOffsetAnimator.setFloatValues(getWidth(), 0);
+        mAnimatorSet.start();
+    }
+
+    private void reboundShowAnim(){
+        doAnim = true;
+        mOffsetPixels = mBeginOffsetX = getWidth();
+        mSpring.setCurrentValue(0);
+        mSpring.setEndValue(1);
+    }
+
+    public void show(){
+        showingChangeAlpha = true;
+        setAlpha(0);
+        setVisibility(VISIBLE);
+        if(mAnimType == NORMAL_ANIM) {
+            normalShowAnim();
+        }else{
+            reboundShowAnim();
+        }
+    }
+
     private void closeAnim(int closeDirection){
         normalCloseAnimStart(closeDirection);
     }
@@ -337,7 +380,7 @@ public class KugouLayout extends ViewGroup {
         if(mIsDragging) {
             mVelocityTracker.computeCurrentVelocity(1000, mMaxVelocity);
             final int initialVelocity = (int) getXVelocity(mVelocityTracker);
-            canChangeAlpha = false;
+            closingChangeAlpha = false;
 
             if(initialVelocity == 0 || ALWAYS_REBOUND == mAnimType){
                 scrollBackAnim();
@@ -371,6 +414,7 @@ public class KugouLayout extends ViewGroup {
     }
 
     protected void stopAnim(){
+        setAlpha(1);
         if(REBOUND_ANIM == mAnimType || ALWAYS_REBOUND == mAnimType)
             reboundAnimStop();
         else
@@ -548,12 +592,12 @@ public class KugouLayout extends ViewGroup {
             float tempValue = value;
             object.mOffsetPixels = tempValue;
             moveContent();
-            if(canChangeAlpha && tempValue>=mWidth*3/5) {
-                float newAlpha = (mWidth - tempValue) / (mWidth * 2 / 5);
-                setAlpha(newAlpha);
-            }else if(canChangeAlpha && -tempValue>=mWidth*3/5){
-                float newAlpha = (mWidth + tempValue) / (mWidth * 2 / 5);
-                setAlpha(newAlpha);
+            if(showingChangeAlpha){
+                changeAlpha();
+            }else if(closingChangeAlpha && tempValue>=mWidth*3/5) {
+                setAlpha((mWidth - tempValue) / (mWidth * 2 / 5));
+            }else if(closingChangeAlpha && -tempValue>=mWidth*3/5){
+                setAlpha((mWidth + tempValue) / (mWidth * 2 / 5));
             }
         }
     };

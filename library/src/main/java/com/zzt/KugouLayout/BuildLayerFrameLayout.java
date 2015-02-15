@@ -1,4 +1,4 @@
-package com.zzt.library;
+package com.zzt.KugouLayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
