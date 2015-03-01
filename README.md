@@ -52,4 +52,4 @@ Demo Activity2
 
 QQ:344696734
 
-weibo: http://weibo.com/u/1845905190
+
