@@ -281,6 +281,7 @@ public class KugouLayout extends ViewGroup {
             mContentContainer.offsetLeftAndRight(((int)mOffsetPixels - getLeft())/2);
             mContentContainer.setRotation(((int) mOffsetPixels - getLeft())/60);
         }
+        invalidate();
     }
 
     private void normalCloseAnimStart(int closeDirection){
