@@ -564,11 +564,9 @@ public class KugouLayout extends ViewGroup {
                     //startLayoutAnimation();
                     final float x = ev.getX(pointerIndex);
                     final float y = ev.getY(pointerIndex);
-                    float dx = x - mLastMotionX;
-                    float dy = y - mLastMotionY;
+                    onMoveEvent(x - mLastMotionX, y - mLastMotionY);
                     mLastMotionX = x;
                     mLastMotionY = y;
-                    onMoveEvent(dx, dy);
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
